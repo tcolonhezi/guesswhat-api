@@ -1,5 +1,11 @@
 import { env } from "@/util/env";
 import { GoogleGenAI, Type } from "@google/genai";
+import { z } from "zod";
+
+const challangeSchema = z.object({
+  word: z.string().max(40),
+  tip: z.string().max(200),
+});
 
 async function generateChallenge(theme: string, words: string) {
   const model = "gemini-3.1-flash-lite";
@@ -62,8 +68,11 @@ async function generateChallenge(theme: string, words: string) {
     }
 
     // O retorno é garantido como JSON string válido
-    const result = JSON.parse(response.text);
-    return result;
+    const parsedResult = challangeSchema.parse(JSON.parse(response.text));
+    return {
+      word: parsedResult.word.toLocaleLowerCase(),
+      tip: parsedResult.tip,
+    };
   } catch (error) {
     console.error("Erro ao gerar desafio no Gemini:", error);
     throw error;

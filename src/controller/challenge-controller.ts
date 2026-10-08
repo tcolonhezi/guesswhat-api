@@ -8,7 +8,7 @@ class ChallengeController {
   async createChallenge(request: Request, response: Response) {
     try {
       const bodySchema = z.object({
-        sessionId: z.string(),
+        sessionId: z.uuid(),
         theme: z.enum(themes),
       });
 
@@ -19,7 +19,7 @@ class ChallengeController {
         return response.status(404).json({ message: "Session not found" });
       }
 
-      const usedWordsList = [...session.usedWords].join(", ");
+      const usedWordsList = [...session.usedWords].slice(-50).join(", ");
       console.log("Palavras já usadas:", usedWordsList);
       const result = await generateChallenge(theme, usedWordsList);
 
