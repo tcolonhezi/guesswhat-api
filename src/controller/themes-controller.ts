@@ -1,4 +1,4 @@
-import { themes } from "@/data/themes";
+import { themes } from "../data/themes";
 import { Request, Response } from "express";
 
 class ThemesController {

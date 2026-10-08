@@ -5,7 +5,7 @@ type GameSession = {
 
 const sessions = new Map<string, GameSession>();
 const TTL_MS = 30 * 60 * 1000; // 30 minutos em milissegundos
-const MAX_SESSIONS = 100; // Limite máximo de sessões
+const MAX_SESSIONS = 10000; // Limite máximo de sessões
 const CLEANUP_INTERVAL_MS = 5 * 60 * 1000; // Intervalo de limpeza a cada 5 minutos
 
 function createSession() {

@@ -11,9 +11,8 @@ const app = express();
 
 app.disable("x-powered-by");
 app.set("trust proxy", 1); // trust first proxy
-app.use(helmet());
 
-app.use(express.json());
+app.use(helmet());
 app.use(cors({ origin: allowedOrigins, methods: ["GET", "POST"] }));
 app.use(express.json({ limit: "2kb" }));
 

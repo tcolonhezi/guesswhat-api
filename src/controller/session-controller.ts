@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createSession } from "@/data/session";
+import { createSession } from "../data/session";
 
 class SessionController {
   async session(request: Request, response: Response) {

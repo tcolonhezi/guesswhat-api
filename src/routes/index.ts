@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ChallengeController } from "../controller/challenge-controller";
-import { SessionController } from "@/controller/session-controller";
-import { ThemesController } from "@/controller/themes-controller";
+import { SessionController } from "../controller/session-controller";
+import { ThemesController } from "../controller/themes-controller";
 import { rateLimit } from "express-rate-limit";
 
 const challengeLimiter = rateLimit({

@@ -1,8 +1,8 @@
-import { env } from "@/util/env";
+import { env } from "../util/env";
 import { GoogleGenAI, Type } from "@google/genai";
 import { z } from "zod";
 
-const challangeSchema = z.object({
+const challengeSchema = z.object({
   word: z.string().max(40),
   tip: z.string().max(200),
 });
@@ -68,10 +68,13 @@ async function generateChallenge(theme: string, words: string) {
     }
 
     // O retorno é garantido como JSON string válido
-    const parsedResult = challangeSchema.parse(JSON.parse(response.text));
+    const parsedResult = challengeSchema.safeParse(JSON.parse(response.text));
+    if (!parsedResult.success) {
+      throw new Error("Resposta inválida retornada pelo modelo.");
+    }
     return {
-      word: parsedResult.word.toLocaleLowerCase(),
-      tip: parsedResult.tip,
+      word: parsedResult.data.word.toLocaleLowerCase(),
+      tip: parsedResult.data.tip,
     };
   } catch (error) {
     console.error("Erro ao gerar desafio no Gemini:", error);

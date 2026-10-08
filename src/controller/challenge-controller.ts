@@ -1,6 +1,6 @@
-import { getSession } from "@/data/session";
-import { themes } from "@/data/themes";
-import { generateChallenge } from "@/services/gemini";
+import { getSession } from "../data/session";
+import { themes } from "../data/themes";
+import { generateChallenge } from "../services/gemini";
 import { Request, Response } from "express";
 import { z } from "zod";
 
@@ -20,7 +20,6 @@ class ChallengeController {
       }
 
       const usedWordsList = [...session.usedWords].slice(-50).join(", ");
-      console.log("Palavras já usadas:", usedWordsList);
       const result = await generateChallenge(theme, usedWordsList);
 
       if (result.word) {
