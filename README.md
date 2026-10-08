@@ -1,92 +1,50 @@
 # GuessWhat API
 
-API para um jogo de adivinhação. Ela cria sessões de jogo, disponibiliza temas e gera palavras secretas com dicas usando a API do Google Gemini.
+API em TypeScript para um jogo de adivinhação. Ela cria sessões, oferece temas e usa o Google Gemini para gerar uma palavra secreta e uma dica.
 
 ## Tecnologias
 
-- Node.js
-- TypeScript
-- Express
-- Google Gemini
+Node.js, TypeScript, Express, CORS, express-rate-limit e Google Gemini.
 
-## Requisitos
+## Como executar
 
-- Node.js 20 ou superior
-- Uma chave de API do Google Gemini
-
-## Instalação
+Requisitos: Node.js 20 ou superior e uma chave da API do Google Gemini.
 
 ```bash
 npm install
 ```
 
-Crie um arquivo `.env` na raiz do projeto com sua chave:
+Crie um arquivo `.env` na raiz do projeto:
 
 ```env
 GEMINI_API_KEY=sua_chave_api
+ALLOWED_ORIGINS=http://localhost:3000
+# Opcional. O padrão é 3333.
+PORT=3333
 ```
 
-## Executar
-
-Modo de desenvolvimento:
+Inicie em modo de desenvolvimento:
 
 ```bash
 npm run dev
 ```
 
-Compilar o projeto:
+Para compilar:
 
 ```bash
 npm run build
 ```
 
-Por padrão, o servidor fica disponível em `http://localhost:3333`. Para usar outra porta, defina a variável de ambiente `PORT`.
-
 ## Endpoints
 
-### Verificar disponibilidade
+| Método | Rota | Descrição |
+| --- | --- | --- |
+| `GET` | `/alive` | Verifica se a API está ativa. |
+| `GET` | `/themes` | Lista os temas disponíveis. |
+| `POST` | `/session` | Cria uma sessão e retorna seu `sessionId`. |
+| `POST` | `/challenge` | Gera uma palavra e uma dica para a sessão e o tema informados. |
 
-`GET /alive`
-
-Retorna o estado do servidor e seu tempo de atividade.
-
-### Listar temas
-
-`GET /themes`
-
-Exemplo de resposta:
-
-```json
-{
-  "themes": [
-    "animais",
-    "comidas",
-    "lugares",
-    "profissões",
-    "objetos",
-    "esportes",
-    "programação"
-  ]
-}
-```
-
-### Criar sessão
-
-`POST /session`
-
-Exemplo de resposta:
-
-```json
-{
-  "sessionId": "id-da-sessao"
-}
-```
-
-### Gerar desafio
-
-`POST /challenge`
-
-Envie o identificador da sessão e um dos temas disponíveis:
+Exemplo de solicitação para `/challenge`:
 
 ```json
 {
@@ -95,13 +53,8 @@ Envie o identificador da sessão e um dos temas disponíveis:
 }
 ```
 
-Exemplo de resposta:
+A resposta contém `word` e `tip`. Os temas disponíveis são animais, comidas, lugares, profissões, objetos, esportes e programação.
 
-```json
-{
-  "word": "girafa",
-  "tip": "É um mamífero conhecido por seu pescoço muito comprido."
-}
-```
+CORS permite apenas as origens configuradas em `ALLOWED_ORIGINS` (separe múltiplas origens por vírgula). A API também limita as solicitações por endereço IP: até 5 desafios e 10 novas sessões por minuto.
 
-As palavras já usadas não são repetidas dentro da mesma sessão. As sessões são mantidas em memória e são apagadas quando o servidor é reiniciado.
+As sessões são mantidas em memória, expiram após 30 minutos e são removidas quando o servidor reinicia. A API considera palavras já usadas ao gerar novos desafios para a mesma sessão.
