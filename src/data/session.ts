@@ -15,11 +15,11 @@ function createSession() {
     );
   }
   const sessionId = crypto.randomUUID();
-  sessions.set(sessionId, {
+  const session = sessions.set(sessionId, {
     usedWords: new Set<string>(),
     createdAt: Date.now(),
   });
-  return sessionId;
+  return { sessionId, createdAt: session.get(sessionId)?.createdAt };
 }
 
 function getSession(sessionId: string) {

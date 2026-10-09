@@ -4,6 +4,7 @@ import { router } from "./routes";
 import cors from "cors";
 import { env } from "./util/env";
 import helmet from "helmet";
+import { requestLogger } from "./middleware/requestLogger";
 
 const allowedOrigins = env.ALLOWED_ORIGINS;
 
@@ -14,6 +15,7 @@ app.set("trust proxy", 1); // trust first proxy
 
 app.use(helmet());
 app.use(cors({ origin: allowedOrigins, methods: ["GET", "POST"] }));
+app.use(requestLogger);
 app.use(express.json({ limit: "2kb" }));
 
 app.get("/alive", (req: Request, res: Response) => {
